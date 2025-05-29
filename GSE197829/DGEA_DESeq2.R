@@ -18,7 +18,7 @@ dds = DESeqDataSetFromMatrix(countData = hc_vs_laa,
                              design = ~ Condition)
 dds = dds[rowSums(counts(dds)) > 10, ]
 nrow(dds)
-vsd <- vst(dds, blind = TRUE)  # Variance stabilizing transformation
+vsd = vst(dds, blind = TRUE)  # Variance stabilizing transformation
 pca_data = plotPCA(vsd, intgroup = "Condition", returnData = TRUE)
 # Extract percentage variance explained
 percentVar = round(100 * attr(pca_data, "percentVar"))
@@ -69,13 +69,13 @@ write.csv(laa_vs_ctrl_upgenes_0_5, file = "laa_vs_ctrl_upgenes_0_5_deseq.csv", r
 write.csv(laa_vs_ctrl_downgenes_0_5, file = "laa_vs_ctrl_downgenes_0_5_deseq.csv", row.names = T)
 
 # Get top 25 upregulated genes
-top_25_up_laa_ctrl <- res_p_val_cut %>%
+top_25_up_laa_ctrl = res_p_val_cut %>%
   filter(log2FoldChange >= 1.5 & pvalue <= 0.05) %>%
   arrange(desc(log2FoldChange)) %>%
   head(25)
 
 # Get top 25 downregulated genes
-top_25_down_laa_ctrl <- res_p_val_cut %>%
+top_25_down_laa_ctrl = res_p_val_cut %>%
   filter(log2FoldChange <= -1.5 & pvalue <= 0.05) %>%
   arrange(log2FoldChange) %>%
   head(25)
@@ -88,7 +88,7 @@ normalized_counts_df_down = subset(normalized_counts_df, rownames(normalized_cou
 library(pheatmap)
 
 # Convert data frame to matrix (if not already in matrix format)
-heatmap_data_up <- as.matrix(normalized_counts_df_up)
+heatmap_data_up = as.matrix(normalized_counts_df_up)
 
 # Create the heatmap
 pheatmap(heatmap_data_up, 
@@ -102,7 +102,7 @@ pheatmap(heatmap_data_up,
          main = "Heatmap of Top 25 Upregulated Genes: Control vs Large Artery Atherosclerosis")
 
 
-heatmap_data_down <- as.matrix(normalized_counts_df_down)
+heatmap_data_down = as.matrix(normalized_counts_df_down)
 pheatmap(heatmap_data_down, 
          color = colorRampPalette(c("blue", "white", "red"))(100), # Gradient colors
          cluster_rows = T,  # Cluster rows
@@ -148,7 +148,7 @@ dds = DESeqDataSetFromMatrix(countData = hc_vs_saa,
                              design = ~ Condition)
 dds = dds[rowSums(counts(dds)) > 10, ]
 nrow(dds)
-vsd <- vst(dds, blind = TRUE)  # Variance stabilizing transformation
+vsd = vst(dds, blind = TRUE)  # Variance stabilizing transformation
 pca_data = plotPCA(vsd, intgroup = "Condition", returnData = TRUE)
 # Extract percentage variance explained
 percentVar = round(100 * attr(pca_data, "percentVar"))
@@ -199,13 +199,13 @@ write.csv(saa_vs_ctrl_upgenes_0_5, file = "saa_vs_ctrl_upgenes_0_5_deseq.csv", r
 write.csv(saa_vs_ctrl_downgenes_0_5, file = "saa_vs_ctrl_downgenes_0_5_deseq.csv", row.names = T)
 
 # Get top 25 upregulated genes
-top_25_up_saa_ctrl <- res_p_val_cut %>%
+top_25_up_saa_ctrl = res_p_val_cut %>%
   filter(log2FoldChange >= 1.5 & pvalue <= 0.05) %>%
   arrange(desc(log2FoldChange)) %>%
   head(25)
 
 # Get top 25 downregulated genes
-top_25_down_saa_ctrl <- res_p_val_cut %>%
+top_25_down_saa_ctrl = res_p_val_cut %>%
   filter(log2FoldChange <= -1.5 & pvalue <= 0.05) %>%
   arrange(log2FoldChange) %>%
   head(25)
@@ -218,7 +218,7 @@ normalized_counts_df_down = subset(normalized_counts_df, rownames(normalized_cou
 library(pheatmap)
 
 # Convert data frame to matrix (if not already in matrix format)
-heatmap_data_up <- as.matrix(normalized_counts_df_up)
+heatmap_data_up = as.matrix(normalized_counts_df_up)
 
 # Create the heatmap
 pheatmap(heatmap_data_up, 
@@ -232,7 +232,7 @@ pheatmap(heatmap_data_up,
          main = "Heatmap of Top 25 Upregulated Genes: Control vs Small Artery Atherosclerosis")
 
 
-heatmap_data_down <- as.matrix(normalized_counts_df_down)
+heatmap_data_down = as.matrix(normalized_counts_df_down)
 pheatmap(heatmap_data_down, 
          color = colorRampPalette(c("blue", "white", "red"))(100), # Gradient colors
          cluster_rows = T,  # Cluster rows

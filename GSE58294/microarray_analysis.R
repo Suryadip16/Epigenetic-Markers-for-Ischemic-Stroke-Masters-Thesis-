@@ -60,12 +60,12 @@ colnames(expr_matrix)
 write.csv(expr_matrix, file = "is_ctrl_expr_matrix_ml_data2.csv", row.names = T)
 
 # Manually compute PCA using prcomp for 3 PCs
-pca_res <- prcomp(t(as.matrix(expr_matrix)))
-pca_var <- pca_res$sdev^2
-percentVar <- round(100 * pca_var / sum(pca_var))[1:3]  # Get % variance for PC1–PC3
-pc_df <- as.data.frame(pca_res$x[, 1:3])
-pc_df$Condition <- factor(c(rep("HC", 23), rep("CE", 69)))
-pc_df$Sample <- rownames(pc_df)
+pca_res = prcomp(t(as.matrix(expr_matrix)))
+pca_var = pca_res$sdev^2
+percentVar = round(100 * pca_var / sum(pca_var))[1:3]  # Get % variance for PC1–PC3
+pc_df = as.data.frame(pca_res$x[, 1:3])
+pc_df$Condition = factor(c(rep("HC", 23), rep("CE", 69)))
+pc_df$Sample = rownames(pc_df)
 
 library(plotly)
 # Plot with plotly
@@ -81,13 +81,13 @@ plot_ly(pc_df, x = ~PC1, y = ~PC2, z = ~PC3, color = ~Condition, type = 'scatter
 
 
 # Get top 25 upregulated genes
-top_25_up_ce_ctrl <- array_res_pval_cut_clean %>%
+top_25_up_ce_ctrl = array_res_pval_cut_clean %>%
   filter(logFC >= 0.5 & adj.P.Val <= 0.05) %>%
   arrange(desc(logFC)) %>%
   head(25)
 
 # Get top 25 downregulated genes
-top_25_down_ce_ctrl <- array_res_pval_cut_clean %>%
+top_25_down_ce_ctrl = array_res_pval_cut_clean %>%
   filter(logFC <= -0.5 & adj.P.Val <= 0.05) %>%
   arrange(desc(logFC)) %>%
   head(25)
@@ -95,7 +95,7 @@ top_25_down_ce_ctrl <- array_res_pval_cut_clean %>%
 normalized_counts_df_up = subset(expr_matrix, rownames(expr_matrix) %in% 
                                   rownames(top_25_up_ce_ctrl))
 
-normalized_counts_df_up <- normalized_counts_df_up[!grepl("LINC", rownames(normalized_counts_df_up)), ]
+normalized_counts_df_up = normalized_counts_df_up[!grepl("LINC", rownames(normalized_counts_df_up)), ]
 
 
 normalized_counts_df_down = subset(expr_matrix, rownames(expr_matrix) %in% 
@@ -103,9 +103,9 @@ normalized_counts_df_down = subset(expr_matrix, rownames(expr_matrix) %in%
 library(pheatmap)
 
 # Convert data frame to matrix (if not already in matrix format)
-heatmap_data_up <- as.matrix(normalized_counts_df_up)
+heatmap_data_up = as.matrix(normalized_counts_df_up)
 group_df = data.frame(Groups=rep(c("HC", "CE"), c(23,69)))
-rownames(group_df) <- colnames(heatmap_data_up)
+rownames(group_df) = colnames(heatmap_data_up)
 
 # Plot heatmap with sample type annotations
 pheatmap(heatmap_data_up, 
@@ -134,9 +134,9 @@ pheatmap(heatmap_data_up,
          show_legend = TRUE)
 
 
-heatmap_data_down <- as.matrix(normalized_counts_df_down)
+heatmap_data_down = as.matrix(normalized_counts_df_down)
 group_df = data.frame(Groups=rep(c("HC", "CE"), c(23,69)))
-rownames(group_df) <- colnames(heatmap_data_down)
+rownames(group_df) = colnames(heatmap_data_down)
 
 ann_colors = list(
   Groups = c(Control="turquoise", Ischemic="darkred"))

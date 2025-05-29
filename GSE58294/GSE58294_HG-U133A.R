@@ -12,7 +12,7 @@ gse_current = "GSE58294"
 # covdesc file name
 
 #covdesc_file = paste("covdesc",gse_current,sep="_") 
-covdesc <- read.delim("covdesc.txt", sep="\t", header=T)
+covdesc = read.delim("covdesc.txt", sep="\t", header=T)
 
 # input and output file directories.
 infile_dir = "data_files"
@@ -86,27 +86,27 @@ if(Affy_chip == "hugene11st")
 #	NORMALIZE
 #---------------------------------
 # read the cel files
-celFiles <- list.celfiles("data_files",full.names=T)
-rawData <- read.celfiles(celFiles)
+celFiles = list.celfiles("data_files",full.names=T)
+rawData = read.celfiles(celFiles)
 
 # rawData is now a GeneFeatureSet object. 
 # this object does not contain information on phenotypes, which has to be loaded separately from the covdesc file
 # pData(rawData) retrieves phenodata from the GenefeatureSet object as a dataframe.
-pData(rawData)$gsm <- rownames(pData(rawData))
-pData(rawData)$source <- covdesc$treatment
+pData(rawData)$gsm = rownames(pData(rawData))
+pData(rawData)$source = covdesc$treatment
 
 
 # Extract raw expression values (before normalization)
-raw_exprs <- log2(pm(rawData))  # Log2 transformation of probe intensities
+raw_exprs = log2(pm(rawData))  # Log2 transformation of probe intensities
 
 # Perform RMA normalization
-normalizedData <- rma(rawData)
+normalizedData = rma(rawData)
 #png("volcano_plot.png", width = 1200, height = 800, res = 150, type = "cairo")
 X11()
 # Extract normalized expression values
-norm_exprs <- exprs(normalizedData)
+norm_exprs = exprs(normalizedData)
 # Define group labels dynamically
-group_labels <- covdesc$treatment
+group_labels = covdesc$treatment
 
 # Save plots to PNG file
 #png("boxplot_normalization_comparison.png", width = 1200, height = 600, res = 150, type = "cairo")
@@ -144,9 +144,9 @@ if (file.exists("boxplot_normalization_comparison.png")) {
 }
 
 # generate expression values matrix
-expval <- exprs(normalizedData)
-prbnames <- rownames(expval)
-clnames <- colnames(expval)
+expval = exprs(normalizedData)
+prbnames = rownames(expval)
+clnames = colnames(expval)
 
 ## get rid of ".cel" extension names from clnames and from colnames(expval)
 nme = strsplit(colnames(expval), "\\.")
@@ -192,19 +192,19 @@ data.fit.eb = eBayes(data.fit.con)
 #volcanoplot(data.fit.eb,coef=1,col="cornflowerblue")
 
 # Generate a table of results from limma
-tab <- topTable(data.fit.eb, coef=1, number=Inf, adjust="BH")
+tab = topTable(data.fit.eb, coef=1, number=Inf, adjust="BH")
 
 #write.csv(tab)
 
 # Add a new column to categorize the genes based on logFC and adjusted p-value
-tab$Category <- "Insignificant"
-tab$Category[tab$logFC > 1 & tab$adj.P.Val < 0.05] <- "Overexpressed"
-tab$Category[tab$logFC < -1 & tab$adj.P.Val < 0.05] <- "Underexpressed"
+tab$Category = "Insignificant"
+tab$Category[tab$logFC > 1 & tab$adj.P.Val < 0.05] = "Overexpressed"
+tab$Category[tab$logFC < -1 & tab$adj.P.Val < 0.05] = "Underexpressed"
 
 # Define colors based on the category
-tab$Color <- "grey" # Default color for insignificant genes
-tab$Color[tab$Category == "Overexpressed"] <- "darkorange"
-tab$Color[tab$Category == "Underexpressed"] <- "darkgreen"
+tab$Color = "grey" # Default color for insignificant genes
+tab$Color[tab$Category == "Overexpressed"] = "darkorange"
+tab$Color[tab$Category == "Underexpressed"] = "darkgreen"
 
 
 X11()
@@ -332,7 +332,7 @@ X11()
 library(AnnotationDbi)
 library(hgu133a2.db)
 
-annot <- data.frame(
+annot = data.frame(
   ENTREZID = sapply(as.list(hgu133a2ENTREZID), paste, collapse = ", "),
   ACCNUM = sapply(as.list(hgu133a2ACCNUM), paste, collapse = ", "),
   SYMBOL = sapply(as.list(hgu133a2SYMBOL), paste, collapse = ", "),
@@ -341,13 +341,13 @@ annot <- data.frame(
 )
 
 # Match limma output with normalized data and annotations
-limma_output <- tab[order(match(rownames(tab), rownames(fData(normalizedData)))), , drop = FALSE]
+limma_output = tab[order(match(rownames(tab), rownames(fData(normalizedData)))), , drop = FALSE]
 
-fData(normalizedData) <- annot[match(rownames(fData(normalizedData)), rownames(annot)), ]
+fData(normalizedData) = annot[match(rownames(fData(normalizedData)), rownames(annot)), ]
 head(fData(normalizedData))
 
 # Combine all data into a single data frame
-df <- data.frame(
+df = data.frame(
   ProbeNames = prbnames,
   fData(normalizedData),
   limma_output,
@@ -357,7 +357,7 @@ df <- data.frame(
 library(dplyr)
 
 # Filter out mismatched probes, probes without a name, and apply logFC and adjusted p-value criteria
-filtered_df <- df %>%
+filtered_df = df %>%
   # Remove rows where SYMBOL is NA or empty (probes without gene names)
   filter(!is.na(SYMBOL) & SYMBOL != "") %>%
   # Remove rows with mismatched probes
@@ -368,7 +368,7 @@ filtered_df <- df %>%
 filtered_df=na.omit(filtered_df)
 
 # Define output file name
-outfile_name <- paste("output_files/", gse_current, "_filtered_limma_output.csv", sep = "")
+outfile_name = paste("output_files/", gse_current, "_filtered_limma_output.csv", sep = "")
 
 # Write the filtered table to a CSV file
 write.csv(filtered_df, file = outfile_name, row.names = FALSE)
